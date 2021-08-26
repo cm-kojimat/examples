@@ -1,0 +1,22 @@
+type Data {
+	id: ID!
+	datetime: AWSDateTime
+	value: Float
+}
+
+type Query {
+	getData(id: ID!): Data @aws_cognito_user_pools
+	dataList(limit: Int!): [Data] @aws_cognito_user_pools
+}
+
+type Mutation {
+	createData(value: Float!, datetime: AWSDateTime!): Data @aws_iam
+	updateValue(id: ID!, value: Float!): Data @aws_iam
+}
+
+type Subscription {
+	onCreateData: Data
+		@aws_subscribe(mutations: ["createData"]) @aws_cognito_user_pools
+	onUpdateValue: Data
+		@aws_subscribe(mutations: ["updateValue"]) @aws_cognito_user_pools
+}
