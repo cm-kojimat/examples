@@ -1,0 +1,5 @@
+export const API_KEY = process.env.REACT_APP_APPSYNC_API_KEY;
+export const REGION = process.env.REACT_APP_APPSYNC_REGION;
+export const ENDPOINT_GRAPHQL = process.env.REACT_APP_APPSYNC_ENDPOINT_GRAPHQL;
+export const ENDPOINT_REALTIME =
+  process.env.REACT_APP_APPSYNC_ENDPOINT_REALTIME;

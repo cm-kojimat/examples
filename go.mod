@@ -6,7 +6,6 @@ require (
 	github.com/99designs/gqlgen v0.13.0
 	github.com/gin-gonic/gin v1.7.4
 	github.com/hasura/go-graphql-client v0.2.0
-	github.com/koding/websocketproxy v0.0.0-20181220232114-7ed82d81a28c
 )
 
 require (
@@ -16,7 +15,6 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/golang/protobuf v1.3.5 // indirect
 	github.com/google/uuid v1.1.2 // indirect
-	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/klauspost/compress v1.10.3 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect

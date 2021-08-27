@@ -1,42 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { ApolloProvider } from "react-apollo";
-import { ApolloClient } from "apollo-client";
-import { getMainDefinition } from "apollo-utilities";
-import { ApolloLink, split } from "apollo-link";
-import { HttpLink } from "apollo-link-http";
-import { WebSocketLink } from "apollo-link-ws";
-import { InMemoryCache } from "apollo-cache-inmemory";
-
+import { createAuthLink } from "aws-appsync-auth-link";
+import { createSubscriptionHandshakeLink } from "aws-appsync-subscription-link";
+import { ApolloClient, InMemoryCache, ApolloLink } from "@apollo/client/core";
 import App from "./App";
+import {
+  API_KEY,
+  REGION,
+  ENDPOINT_GRAPHQL,
+  ENDPOINT_REALTIME,
+} from "./aws-exports";
 
-const httpLink = new HttpLink({
-  uri: process.env.REACT_APP_APPSYNC_ENDPOINT_GRAPHQL,
-  headers: {
-    "X-Api-Key": process.env.REACT_APP_APPSYNC_APPSYNC_API_KEY,
-  },
-});
+const auth = {
+  type: "API_KEY",
+  apiKey: API_KEY,
+};
 
-const wsLink = new WebSocketLink({
-  uri: process.env.REACT_APP_APPSYNC_ENDPOINT_REALTIME,
-  options: {
-    reconnect: true,
-  },
-  headers: {
-    "X-Api-Key": process.env.REACT_APP_APPSYNC_APPSYNC_API_KEY,
-  },
-});
-
-const terminatingLink = split(
-  ({ query }) => {
-    const { kind, operation } = getMainDefinition(query);
-    return kind === "OperationDefinition" && operation === "subscription";
-  },
-  wsLink,
-  httpLink
-);
-
-const link = ApolloLink.from([terminatingLink]);
+const link = ApolloLink.from([
+  createAuthLink({ url: ENDPOINT_GRAPHQL, region: REGION, auth }),
+  createSubscriptionHandshakeLink({
+    url: ENDPOINT_GRAPHQL,
+    region: REGION,
+    auth,
+  }),
+]);
 
 const cache = new InMemoryCache();
 

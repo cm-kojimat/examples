@@ -4,7 +4,7 @@ import { Query } from "react-apollo";
 
 const GET_DATA_LIST = gql`
   query {
-    dataList {
+    dataList(limit: 5) {
       id
       value
     }
@@ -13,7 +13,7 @@ const GET_DATA_LIST = gql`
 
 const ON_CREATE_DATA = gql`
   subscription {
-   onCreateData {
+    onCreateData {
       id
     }
   }

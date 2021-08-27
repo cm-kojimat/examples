@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "local_file" "secure" {
   filename             = ".envrc.secure"
   directory_permission = "0755"
@@ -7,6 +9,7 @@ export APPSYNC_API_KEY=${module.appsync.aws_appsync_api_key.this.key}
 export APPSYNC_ENDPOINT_GRAPHQL=${module.appsync.aws_appsync_graphql_api.this.uris.GRAPHQL}
 export APPSYNC_ENDPOINT_REALTIME=${module.appsync.aws_appsync_graphql_api.this.uris.REALTIME}
 
+export REACT_APP_APPSYNC_REGION=${data.aws_region.current.name}
 export REACT_APP_APPSYNC_API_KEY=${module.appsync.aws_appsync_api_key.this.key}
 export REACT_APP_APPSYNC_ENDPOINT_GRAPHQL=${module.appsync.aws_appsync_graphql_api.this.uris.GRAPHQL}
 export REACT_APP_APPSYNC_ENDPOINT_REALTIME=${module.appsync.aws_appsync_graphql_api.this.uris.REALTIME}
