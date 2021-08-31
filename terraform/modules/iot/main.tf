@@ -15,7 +15,7 @@ resource "aws_iot_topic_rule" "this" {
   enabled     = true
   sql_version = "2016-03-23"
   sql         = <<SQL
-  SELECT * FROM "$aws/things/+/shadow/name/+/update/accepted"
+  SELECT topic() AS topic, topic(6) AS shadow_name, * FROM "$aws/things/+/shadow/name/+/update/accepted"
   SQL
 
   lambda {
@@ -30,4 +30,4 @@ resource "aws_lambda_permission" "this" {
   source_arn    = aws_iot_topic_rule.this.arn
 }
 
-output aws_iot_thing { value = { this = aws_iot_thing.this } }
+output "aws_iot_thing" { value = { this = aws_iot_thing.this } }

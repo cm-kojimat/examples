@@ -7,6 +7,7 @@ module "lambda" {
   source    = "./modules/lambda"
   module_id = "${local.module_id}-lambda"
 
+  appsync_api_key          = module.appsync.aws_appsync_api_key.this.key
   appsync_endpoint_graphql = module.appsync.aws_appsync_graphql_api.this.uris.GRAPHQL
 }
 
