@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "aws-appsync": "^4.1.1",
-    "graphql-tag": "^2.12.5"
-  }
-}
