@@ -22,8 +22,8 @@ ssh:
   localPort: 60022
 
 containerd:
-  system: false
-  user: true
+  system: true
+  user: false
 
 provision:
   - mode: system
