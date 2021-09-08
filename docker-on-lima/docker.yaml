@@ -1,0 +1,59 @@
+arch: "default"
+
+images:
+  - location: "~/Downloads/hirsute-server-cloudimg-amd64.img"
+    arch: "x86_64"
+  - location: "~/Downloads/hirsute-server-cloudimg-arm64.img"
+    arch: "aarch64"
+  - location: "https://cloud-images.ubuntu.com/hirsute/current/hirsute-server-cloudimg-amd64.img"
+    arch: "x86_64"
+  - location: "https://cloud-images.ubuntu.com/hirsute/current/hirsute-server-cloudimg-arm64.img"
+    arch: "aarch64"
+
+cpus: 4
+memory: "16GiB"
+disk: "64GiB"
+
+mounts:
+  - location: "~/src"
+    writable: true
+
+ssh:
+  localPort: 60022
+
+containerd:
+  system: false
+  user: true
+
+provision:
+  - mode: system
+    script: |
+      #!/bin/bash
+      apt-get install -y docker.io
+      dd of=/usr/lib/systemd/system/docker-tcp.socket <<EOF
+      [Unit]
+      Description=Docker Socket for the API
+      PartOf=docker.service
+      [Socket]
+      ListenStream=2375
+      BindIPv6Only=both
+      Service=docker.service
+      [Install]
+      WantedBy=sockets.target
+      EOF
+      systemctl daemon-reload
+      systemctl enable docker-tcp.socket
+      systemctl stop docker.service docker.socket
+      systemctl start docker-tcp.socket
+      systemctl start docker.service
+probes:
+  - script: |
+      #!/bin/bash
+      set -eux -o pipefail
+      if ! timeout 30s bash -c "until test -S /var/run/docker.sock; do sleep 3; done"; then
+        echo >&2 "docker is not running yet"
+        exit 1
+      fi
+    hint: |
+      Run "limactl shell docker sudo systemctl status docker" to check the log.
+      If that is still empty, check the bottom of the log at "/var/log/cloud-init-output.log".
